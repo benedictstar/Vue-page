@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>广东掌上教师招考</title>
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+	<div id="head" v-cloak>
+		<div class="first">
+			<img src="static/TR_circle.png" height="75" width="75">
+			<h1 id="til" v-cloak>{{title}}</h1>
+		</div>
+		<div>
+			<p style="color: white;margin-left: 0.9375rem;height:1.5625rem;font-weight: bold;">{{context}}</p>
+		</div>
+		
+	</div>
+	<div id="body" v-cloak>
+		<div class="super">
+			<p class="introduction" v-cloak>{{inr1}}</p>
+			<div id="app">
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index<4" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row>
+			</div>
+		</div>
+		<div class="super">
+			<p class="introduction">{{inr2}}</p>
+			<div id="app">
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index>=4&&index<=14" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row>
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index>=15&&index<=19" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row class="row">
+			</div>
+		</div>
+		<div class="super">
+			<p class="introduction">{{inr3}}</p>
+			<div id="app">
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index>=20&&index<=30" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row>
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index>=31&&index<=41" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row>
+				<el-row class="row">
+					<el-button class="btn" v-for="(items,index) in cities" v-if="index>=42" size="mini" round :style="items.elmain" @click="change(index)" style="margin-left: 1.25rem">{{items.name}}</el-button>
+				</el-row>
+			</div>
+		</div>
+		<div>
+			<input type="file" @change="edit" style="margin-top: 3.125rem;">
+			<el-table :data="citydata.slice((cpage - 1) * 8, cpage*8)" style="width: 100%;border-radius: 0.625rem;margin-top: 0.625rem;height:26.5625rem;margin-bottom: 1.875rem;" :header-cell-style="myhead">
+				 <el-table-column
+				        prop="id"
+				        label="序号"
+						width="150"
+						align="center"
+				        >
+				 </el-table-column>
+				 <el-table-column
+				        prop="area"
+				        label="区域"
+						width="200"
+						align="center"
+				        >
+				 </el-table-column>
+				 <el-table-column
+				        prop="platform"
+				        label="平台/部门"
+						width="500"
+						align="center"
+				        >
+				 </el-table-column>
+				 <el-table-column
+				        label="招聘渠道"
+						align="center"
+				        >
+						 <template slot-scope="scope">
+							  <a :href="scope.row.road">{{scope.row.road}}</a>
+						</template>
+				 </el-table-column>
+			</el-table>
+		</div>
+		<div class="block">
+			<el-pagination
+			  @current-change="handleCurrentChange"
+			  :current-page="cpage"
+			  prev-text="上一页"
+			  next-text="下一页"
+			  layout="total, prev, pager, next, jumper"
+			  :page-size="8"
+			  :total="totalsize">
+			</el-pagination>
+		</div>
+	</div>
+	
+	<style>
+		html{
+			padding: 0rem;
+			background-color: #F5F5F5;
+		}
+		#head{
+			background-image:linear-gradient(#2CB0FF, #007AFF);
+			/* height: 8rem; */
+			width:100%;
+		}
+		.block{
+			margin-bottom: 3.125rem;
+			text-align:center
+		}
+		.btn{
+			margin-left: 1.25rem,
+			border:1px solid #707070
+		}
+		.row{
+			margin-bottom: 0.625rem;
+			margin-top: 0.75rem;
+		}
+		.first{
+			height:4rem;
+			margin-left:0.625rem;
+			display: flex;
+			flex-direction: row;
+			padding-top: 0.3125rem;
+		}
+		#til{
+			color: white;
+			letter-spacing: 0.375rem;
+			font-size: 1.75rem;
+			margin-left: 1.25rem;
+		}
+		#body{
+			background-color: white;
+			height: 17.8125rem;
+			margin-top: 2.5rem;
+			margin-left: 4%;
+			margin-right: 4%;
+			width: 92%;
+			border-radius: 0.9375rem;
+			padding-top: 0.9375rem;
+		}
+		.super{
+			display: flex;
+			flex-direction: row;
+			margin-left: 1.25rem;
+			/* align-items: center; */
+		}
+		.introduction{
+			font-size: 0.9375rem;
+			color: #0185FE;
+			font-weight: 600;
+			font-family: Alibaba PuHuiTi 2.0;
+			flex-basis: 8%;
+		}
+		#tail{
+			background-color: white;
+			height: 37.5rem;
+			margin-top: 2.5rem;
+			/* margin-left: 4%;
+			margin-right: 4%; */
+			width: 100%;
+			border-radius: 0.9375rem;
+			padding-top: 0.9375rem;
+			margin-bottom: 6.25rem;
+		}
+		[v-cloak]{
+		            display: none
+		        }
+	</style>
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="static/xlsx.core.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    var Head=new Vue({
+      el: '#head',
+      data: function() {
+        return { 
+			title: "广东掌上教师招考",
+			context:"招考信息管理"
+		}
+      }
+    })
+	var Body=new Vue({
+	  el: '#body',
+	  data: function() {
+	    return { 
+			inr1: "超一线城市：",
+			inr2:"新一线城市：",
+			inr3:"其他城市：",
+			cpage:1,
+			citynow:0,
+			totalsize:0,
+			new:{
+				background:"#007FFE",
+				color:"white"
+			},
+			cities:[
+				{name:'广州',elmain:{color:"white",background:"#007FFE",width:"80px"}},
+				{name:'深圳',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'北京',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'上海',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'成都',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'重庆',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'杭州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'武汉',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'成都',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'西安',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'天津',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'苏州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'南京',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'郑州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'长沙',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'东莞',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'沈阳',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'青岛',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'合肥',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'佛山',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'哈尔滨',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'长春',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'呼和浩特',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'石家庄',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'太原',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'济南',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'南昌',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'福州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'南宁',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'海口',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'昆明',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'贵阳',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'拉萨',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'兰州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'银川',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'乌鲁木齐',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'西宁',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'厦门',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'大连',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'宁波',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'珠海',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'中山',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'惠州',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'江门',elmain:{color:"black",background:"white",width:"80px"}},
+				{name:'肇庆',elmain:{color:"black",background:"white",width:"80px"}},
+			],
+			tableData:[
+				{id:29,area:"增城区",platform:"增城区人民市政府",road:"http://www.zc.gov.cn/zx/tzgg/index.html",c:"广州市"},
+				{id:8,area:"白云区",platform:"广州市教育局",road:"http://jyj.gz.gov.cn/yw/tzgg/",c:"广州市"},
+				{id:9,area:"白云区",platform:"广州市白云区人民政府",road:"http://www.by.gov.cn/ywdt/tzgg/",c:"广州市"},
+				{id:25,area:"从化区",platform:"广州市从化区人民政府",road:"http://www.conghua.gov.cn/zfjg/qrlzyhshbzj/tzgg/",c:"广州市"},
+				{id:26,area:"从化区",platform:"广州市从化区人民政府",road:"http://www.conghua.gov.cn/zwgk/gggs/",c:"广州市"},
+				{id:27,area:"从化区",platform:"广州市从化区人民政府",road:"http://www.conghua.gov.cn/zwgk/zdlyxxgk/jycy/zpxx/",c:"广州市"},
+				{id:28,area:"从化区",platform:"广州市从化区人民政府",road:"http://www.conghua.gov.cn/zwgk/gggs/",c:"广州市"},
+				{id:15,area:"番禺区",platform:"广州市番禺区人民政府",road:"http://www.panyu.gov.cn/gzpyjy/gkmlpt/index#1335",c:"广州市"},
+				{id:13,area:"海珠区",platform:"广州市教育局",road:"http://jyj.gz.gov.cn/yw/tzgg/",c:"广州市"},
+				{id:14,area:"海珠区",platform:"广州市海珠区人民政府",road:"http://www.haizhu.gov.cn/gzjg/qzf/hzqrsj/kszp/",c:"广州市"},
+				
+				
+				{id:36,area:"宝安区",platform:"宝安区教育局",road:"http://www.baoan.gov.cn/jyj/zwgk/tzgg/",c:"深圳市"},
+				{id:31,area:"福田区",platform:"福田区委组织部",road:"http://www.szft.gov.cn/bmxx_qt/qwzzb/zkzl/",c:"深圳市"},
+				{id:32,area:"福田区",platform:"福田区教育局",road:"http://www.szft.gov.cn/bmxx/qjyj/ztfw/fwdt/",c:"深圳市"},
+				{id:37,area:"龙岗区",platform:"龙岗区教育局",road:"http://www.lg.gov.cn/bmzz/jyj/xxgk/rsxx/",c:"深圳市"},
+				{id:38,area:"龙岗区",platform:"龙华区教育局",road:"http://www.szlhq.gov.cn/bmxxgk/jyj/dtxx_124232/zpxx/",c:"深圳市"},
+				{id:33,area:"罗湖区",platform:"罗湖区教育局",road:"http://www.szlh.gov.cn/lhjyjdds/gkmlpt/index",c:"深圳市"},
+				{id:34,area:"南山区",platform:"南山教育在线（南山区教育局）",road:"https://www.szns.edu.cn/tzgg/",c:"深圳市"},
+				{id:30,area:"市直属",platform:"深圳市教育局",road:"http://szeb.sz.gov.cn/home/xxgk/flzy/gggs/index.html",c:"深圳市"},
+			],
+			citydata:[],
+			myhead:{
+				background:"#d4f0ff",
+				color:"#0185FE"
+			}
+		}
+	  },
+	  mounted:function(){
+		  this.begin();
+	  },
+	  methods:{
+		  begin:function(){
+			  var s=this.cities[this.citynow].name+'市';
+			  this.citydata=[];
+			  for(let t=0;t<this.tableData.length;t++){
+			  				  if(this.tableData[t].c==s){
+			  					  this.citydata.push(this.tableData[t]);
+			  				  }
+			  }
+			  this.totalsize=this.citydata.length;
+			  this.cpage=1;
+		  },
+		  change:function(index){
+			  this.citynow=index;
+			  for(let i=0;i<this.cities.length;i++){
+				  if(i==this.citynow){
+					  this.cities[this.citynow].elmain.color=this.new.color;
+					  this.cities[this.citynow].elmain.background=this.new.background;
+				  }
+				  else{
+					  this.cities[i].elmain.color="black",
+					  this.cities[i].elmain.background="white"
+				  }
+			  }
+			  var s=this.cities[this.citynow].name+'市';
+			  this.citydata=[];
+			  for(let t=0;t<this.tableData.length;t++){
+				  if(this.tableData[t].c==s){
+					  this.citydata.push(this.tableData[t]);
+				  }
+			  }
+			  this.totalsize=this.citydata.length;
+			  this.cpage=1;
+			  
+			  // let k=this.cities[index].name+"市";
+			  // console.log(k);
+			  // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+			  // axios.post("https://cloud1-8ggeumhe5b48fafe-1307972625.ap-shanghai.app.tcloudbase.com/return-recruit-info?city="+k,{headers:{Connection:"keep-alive"}}).then (function (res) {
+			  //                         console.log(res);
+			                          
+			  //                     })
+			  
+		  },
+		  edit:function(e){
+			  var files = e.target.files;
+			  
+			  console.log(files)
+			  const that=this;
+			  var fileReader = new FileReader();
+			  // persons=[];
+			  fileReader.onload = function(ev) {
+			      try {
+			          var data = ev.target.result,
+			              workbook = XLSX.read(data, {
+			                  type: 'binary'
+			              }), // 以二进制流方式读取得到整份excel表格对象
+			              persons = []; // 存储获取到的数据
+			      } catch (e) {
+			          console.log('文件类型不正确');
+			          return;
+			      }
+			  			
+			      // 表格的表格范围，可用于判断表头是否数量是否正确
+			      var fromTo = '';
+			      // 遍历每张表读取
+			      for (var sheet in workbook.Sheets) {
+			          if (workbook.Sheets.hasOwnProperty(sheet)) {
+			              fromTo = workbook.Sheets[sheet]['!ref'];
+			              console.log(fromTo);
+			              persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+			              // break; // 如果只取第一张表，就取消注释这行
+			          }
+			      }	
+				  // that.tableData[0].id=persons[0].序号;
+				  // that.tableData[0].area=persons[0].区/县;
+				  // var keys1 = [];
+				  var i=0;
+				  var city={};
+				  that.tableData=[];
+				  for(let j=0;j<persons.length;j++){
+					  i=0;
+					  for (var p1 in persons[j]) {
+						
+						if(i==0){
+							city.id=persons[j][p1];
+						}
+						if(i==1){
+							city.province=persons[j][p1];
+						}
+						if(i==2){
+							city.c=persons[j][p1];
+						}
+						if(i==3){
+							city.area=persons[j][p1];
+						}
+						if(i==4){
+							city.platform=persons[j][p1];
+						}
+						if(i==5){
+							city.road=persons[j][p1];
+						}
+						i++;
+					   }
+					   that.tableData.push(city);
+					   city={}
+					   
+				  }
+				  var s=that.cities[that.citynow].name+'市';
+				  that.citydata=[];
+				  for(let t=0;t<that.tableData.length;t++){
+					  if(that.tableData[t].c==s){
+						  that.citydata.push(that.tableData[t]);
+					  }
+				  }
+				  that.totalsize=that.citydata.length;
+				  };
+				  fileReader.readAsBinaryString(files[0]);
+				 
+		  },
+		  handleCurrentChange:function(val){
+			  this.cpage=val;
+		  },
+	  }
+	})
+  </script>
+</html>
